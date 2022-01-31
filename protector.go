@@ -11,7 +11,7 @@ import (
 )
 
 // The entry key is the password value to use for AES encrypting and decrypting of the values to/from the database.
-var locksetEntryKey []byte
+var sqlProtectorPassphrase []byte
 
 func init() {
 	SetSQLProtectorPassphrase([]byte(os.Getenv("DARE_PASSPHRASE")))
@@ -19,27 +19,27 @@ func init() {
 
 // GetSQLProtectorPassphrase returns the password used for encryption.
 func GetSQLProtectorPassphrase() []byte {
-	return locksetEntryKey
+	return sqlProtectorPassphrase
 }
 
 // SetSQLProtectorPassphrase sets the password to use for encryption.
-func SetSQLProtectorPassphrase(k []byte) error {
-	kl := len(k)
+func SetSQLProtectorPassphrase(passphrase []byte) error {
+	passphraseLen := len(passphrase)
 
 	// DEVELOPERS NOTE:
 	// Why are we limited to 16, 24, and or 32? The `aes.NewCipher` function only
 	// allows those sizes as per documentation via https://pkg.go.dev/crypto/aes#NewCipher.
 	// Since we are using `aes.NewCipher` in the `encrypt` function, we must
-	// enforce this restruction here.
-	if kl != 16 && kl != 24 && kl != 32 {
-		return fmt.Errorf("Passphrase must be 16, 24, or 32 bytes and not %d", kl)
+	// enforce this passphrase length here.
+	if passphraseLen != 16 && passphraseLen != 24 && passphraseLen != 32 {
+		return fmt.Errorf("Passphrase must be 16, 24, or 32 bytes and not %d", passphraseLen)
 	}
-	locksetEntryKey = k
+	sqlProtectorPassphrase = passphrase
 	return nil
 }
 
 func encrypt(plaintext string) (chipertext string, err error) {
-	block, _ := aes.NewCipher(locksetEntryKey)
+	block, _ := aes.NewCipher(sqlProtectorPassphrase)
 	gcm, err := cipher.NewGCM(block)
 	if err != nil {
 		return
@@ -58,7 +58,7 @@ func encrypt(plaintext string) (chipertext string, err error) {
 }
 
 func decrypt(cipherText string) (plainText string, err error) {
-	block, err := aes.NewCipher(locksetEntryKey)
+	block, err := aes.NewCipher(sqlProtectorPassphrase)
 	if err != nil {
 		return
 	}

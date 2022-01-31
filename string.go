@@ -8,6 +8,7 @@ import (
 
 // ProtectString represents the string value that will get encrypted when the data is stored in the database and when we want to decrypt data from a database.
 type ProtectString struct {
+	// Plaintext data in use when your application fetches the data from the database; in addition, plaintext data gets encrypted when saved to the database.
 	Plaintext string
 }
 

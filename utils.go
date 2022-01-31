@@ -32,7 +32,7 @@ func SetSQLProtectorPassphrase(k []byte) error {
 	// Since we are using `aes.NewCipher` in the `encrypt` function, we must
 	// enforce this restruction here.
 	if kl != 16 && kl != 24 && kl != 32 {
-		return fmt.Errorf("Invalid DARE_PASSPHRASE; must be 16, 24, or 32 bytes (got %d)", kl)
+		return fmt.Errorf("Passphrase must be 16, 24, or 32 bytes and not %d", kl)
 	}
 	locksetEntryKey = k
 	return nil
@@ -58,7 +58,6 @@ func encrypt(plaintext string) (chipertext string, err error) {
 }
 
 func decrypt(cipherText string) (plainText string, err error) {
-	// prepare cipher
 	block, err := aes.NewCipher(locksetEntryKey)
 	if err != nil {
 		return
@@ -68,8 +67,7 @@ func decrypt(cipherText string) (plainText string, err error) {
 		return
 	}
 	nonceSize := gcm.NonceSize()
-	//
-	// process ciphertext
+
 	ciphertextByte, err := base64.StdEncoding.DecodeString(cipherText)
 	if err != nil {
 		return
@@ -84,6 +82,6 @@ func decrypt(cipherText string) (plainText string, err error) {
 		return
 	}
 	plainText = string(plaintextByte)
-	//
+
 	return
 }

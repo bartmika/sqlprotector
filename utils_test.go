@@ -5,25 +5,25 @@ import (
 	"testing"
 )
 
-func TestSetAndGetEntryKey(t *testing.T) {
+func TestSetAndGetSQLPassphrase(t *testing.T) {
 	// CASE 1: Error
-	expectedEntryKey := []byte("lalalalala")
-	err := SetSQLProtectorPassphrase(expectedEntryKey)
+	expectedPassphrase := []byte("lalalalala")
+	err := SetSQLProtectorPassphrase(expectedPassphrase)
 	if err == nil {
 		t.Errorf("Expected an error but got none!")
 	}
 
 	// CASE 2: Success
-	expectedEntryKey = []byte("sdfdsfedrdsfsdfsdfazfasfasdfsdfa")
-	err = SetSQLProtectorPassphrase(expectedEntryKey)
+	expectedPassphrase = []byte("sdfdsfedrdsfsdfsdfazfasfasdfsdfa")
+	err = SetSQLProtectorPassphrase(expectedPassphrase)
 	if err != nil {
 		t.Errorf("Expected no error but error: %s", err.Error())
 	}
 
 	// Get our entry key.
-	actualEntryKey := GetSQLProtectorPassphrase()
-	if reflect.DeepEqual(actualEntryKey, expectedEntryKey) == false {
-		t.Errorf("Incorrect entry key, got %v but was expecting %v", actualEntryKey, expectedEntryKey)
+	actualPassphrase := GetSQLProtectorPassphrase()
+	if reflect.DeepEqual(actualPassphrase, expectedPassphrase) == false {
+		t.Errorf("Incorrect entry key, got %v but was expecting %v", actualPassphrase, expectedPassphrase)
 	}
 }
 

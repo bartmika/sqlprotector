@@ -20,7 +20,7 @@ func TestProtectFloat64Value(t *testing.T) {
 func TestProtectFloat64Scan(t *testing.T) {
 	SetSQLProtectorPassphrase([]byte("sdfdsfedrdsfsdfsdfazfasfasdfsdfa"))
 	var pt ProtectFloat64
-	var expected float64 = 123.456
+	expected := float64(123.456)
 
 	// CASE 1: String
 	ct := "yy9jE+QDGI8fc1HyA3qqASFIlJqrQTW7HEYsQs5REKrWIFXxzK8="

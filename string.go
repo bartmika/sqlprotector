@@ -4,7 +4,6 @@ import (
 	"database/sql/driver"
 	"fmt"
 	"reflect"
-	"strconv"
 )
 
 // ProtectString represents the string value that will get encrypted when the data is stored in the database and when we want to decrypt data from a database.
@@ -26,21 +25,13 @@ func (ls ProtectString) Value() (driver.Value, error) {
 func (ls *ProtectString) Scan(value interface{}) error {
 	switch v := value.(type) {
 	case string:
-		encrypted_text, err := strconv.Unquote(`"` + v + `"`)
-		if err != nil {
-			return err
-		}
-		s, err := decrypt(encrypted_text)
+		s, err := decrypt(v)
 		if err != nil {
 			return err
 		}
 		ls.Plaintext = s
 	case []byte:
-		encrypted_text, err := strconv.Unquote(`"` + string(v) + `"`)
-		if err != nil {
-			return err
-		}
-		s, err := decrypt(encrypted_text)
+		s, err := decrypt(string(v))
 		if err != nil {
 			return err
 		}

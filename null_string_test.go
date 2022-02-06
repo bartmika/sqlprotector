@@ -3,7 +3,6 @@ package sqlprotector
 import (
 	"database/sql"
 	"encoding/base64"
-	"log"
 	"testing"
 )
 
@@ -17,7 +16,6 @@ func TestProtectNullStringValue(t *testing.T) {
 	if ct == nil {
 		t.Errorf("Expected no nills but got a nll")
 	}
-	log.Println(ct)
 }
 
 func TestProtectNullStringScan(t *testing.T) {
